@@ -1,11 +1,11 @@
 package banksystem;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +13,12 @@ import org.slf4j.LoggerFactory;
  * Represents a bank that manages customers.
  */
 public final class Bank {
+    /** Logger for bank operations. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Bank.class);
+    /** Index of account type in CSV line. */
     private static final int ACCOUNT_TYPE_INDEX = 3;
 
+    /** List of customers in the bank. */
     private List<Customer> customerList;
 
     /**
@@ -26,9 +29,9 @@ public final class Bank {
     }
 
     /**
-     * Returns the list of customers.
+     * Returns the customer list.
      *
-     * @return the customer list
+     * @return the list of customers
      */
     public List<Customer> getCustomerList() {
         return customerList;
@@ -45,9 +48,9 @@ public final class Bank {
     }
 
     /**
-     * Loads customer data from a given input stream.
+     * Loads customer data from an input stream.
      *
-     * @param inputStream the input stream containing the data
+     * @param inputStream the stream to read from
      * @throws IOException if an I/O error occurs
      */
     public void loadDataFromInputStream(final InputStream inputStream)
@@ -56,7 +59,7 @@ public final class Bank {
         Customer currentCustomer = null;
 
         try (BufferedReader reader =
-                     new BufferedReader(new InputStreamReader(inputStream))) {
+                new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 currentCustomer = processLine(line, currentCustomer, customers);
@@ -66,14 +69,6 @@ public final class Bank {
         LOGGER.info("Loaded {} customers", customers.size());
     }
 
-    /**
-     * Processes a single line of input and returns the current customer.
-     *
-     * @param line            the line to process
-     * @param currentCustomer the currently active customer
-     * @param customers       the list of all customers
-     * @return the (possibly updated) current customer
-     */
     private Customer processLine(final String line,
                                  final Customer currentCustomer,
                                  final List<Customer> customers) {
@@ -90,7 +85,8 @@ public final class Bank {
                         account.getAccountNumber(),
                         currentCustomer.getFullName());
             } else {
-                LOGGER.warn("Account line without preceding customer: {}", line);
+                LOGGER.warn("Account line without preceding customer: {}",
+                        line);
             }
             return currentCustomer;
         } else {
@@ -99,12 +95,6 @@ public final class Bank {
         }
     }
 
-    /**
-     * Creates a customer from a line of text.
-     *
-     * @param line the line in format "C;idNumber;fullName"
-     * @return the new customer
-     */
     private Customer createCustomerFromLine(final String line) {
         String[] parts = line.split(";");
         String idNumber = parts[1];
@@ -112,18 +102,11 @@ public final class Bank {
         return new Customer(idNumber, fullName);
     }
 
-    /**
-     * Creates an account from a line of text.
-     *
-     * @param line the line in format "A;accountNumber;balance;type"
-     * @return the new account (Savings or Checking)
-     */
     private Account createAccountFromLine(final String line) {
         String[] parts = line.split(";");
         String accountNumber = parts[1];
         double balance = Double.parseDouble(parts[2]);
         String type = parts[ACCOUNT_TYPE_INDEX];
-
         if ("SAVINGS".equalsIgnoreCase(type)) {
             return new SavingsAccount(accountNumber, balance);
         } else {

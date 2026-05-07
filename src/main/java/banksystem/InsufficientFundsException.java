@@ -1,5 +1,4 @@
 package banksystem;
-
 /**
  * Thrown when a withdrawal amount exceeds the available balance.
  */

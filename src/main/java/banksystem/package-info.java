@@ -1,4 +1,5 @@
-package banksystem;
 /**
- * Contains classes for a simple banking system.
+ * Provides classes for a banking system including accounts,
+ * customers, and transactions.
  */
+package banksystem;

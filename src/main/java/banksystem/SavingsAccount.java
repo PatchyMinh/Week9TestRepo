@@ -1,5 +1,4 @@
 package banksystem;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,20 +6,24 @@ import org.slf4j.LoggerFactory;
  * Represents a savings account that requires a minimum balance.
  */
 public class SavingsAccount extends Account {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SavingsAccount.class);
+    /** Logger for savings account events. */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SavingsAccount.class);
+    /** Minimum allowed balance for a savings account. */
     private static final double MINIMUM_BALANCE = 500.0;
 
     /**
-     * Constructs a savings account.
+     * Constructs a savings account with given number and balance.
      *
      * @param accountNumber the account number
-     * @param balance       the initial balance (must be ≥ MINIMUM_BALANCE)
+     * @param balance the initial balance (should be >= MINIMUM_BALANCE)
      */
-    public SavingsAccount(final String accountNumber, final double balance) {
+    public SavingsAccount(final String accountNumber,
+            final double balance) {
         super(accountNumber, balance);
         if (balance < MINIMUM_BALANCE) {
-            LOGGER.warn("Savings account {} opened with balance below minimum: {}",
-                    accountNumber, balance);
+            LOGGER.warn("Savings account {} opened, balance below minimum: {}",
+            accountNumber, balance);
         }
     }
 
@@ -41,10 +44,9 @@ public class SavingsAccount extends Account {
     /**
      * Withdraws an amount, ensuring minimum balance is maintained.
      *
-     * @param amount the amount to withdraw (positive, ≤ balance - MINIMUM_BALANCE)
+     * @param amount the amount to withdraw
      * @throws InvalidFundingAmountException if amount is not positive
-     * @throws InsufficientFundsException    if balance after withdrawal
-     *                                       would fall below MINIMUM_BALANCE
+     * @throws InsufficientFundsException if withdrawal would fall below minimum
      */
     @Override
     public void withdraw(final double amount)

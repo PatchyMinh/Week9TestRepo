@@ -1,0 +1,6 @@
+2026-05-07 21:19:32.363 [main] INFO  banksystem.Account - Deposited: 500.0 into account 123456789
+2026-05-07 21:19:32.366 [main] INFO  banksystem.CheckingAccount - Checking deposit: 500.0 into account 123456789
+2026-05-07 21:24:21.548 [main] INFO  banksystem.Account - Deposited: 500.0 into account 123456789
+2026-05-07 21:24:21.552 [main] INFO  banksystem.CheckingAccount - Checking deposit: 500.0 into account 123456789
+2026-05-07 21:25:57.971 [main] INFO  banksystem.Account - Deposited: 500.0 into account 123456789
+2026-05-07 21:25:57.974 [main] INFO  banksystem.CheckingAccount - Checking deposit: 500.0 into account 123456789

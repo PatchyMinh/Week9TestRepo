@@ -1,5 +1,4 @@
 package banksystem;
-
 /**
  * Base exception for banking-related errors.
  */

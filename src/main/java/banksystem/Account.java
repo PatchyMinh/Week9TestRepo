@@ -1,5 +1,4 @@
 package banksystem;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,18 +10,23 @@ import org.slf4j.LoggerFactory;
  * Represents a bank account with basic deposit/withdraw operations.
  */
 public class Account {
+    /** Logger for account-related events. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Account.class);
+    /** Prime number for hash code calculation. */
     private static final int HASH_PRIME = 32;
 
+    /** The unique account number. */
     private String accountNumber;
+    /** The current balance of the account. */
     private double balance;
+    /** The list of transactions performed on this account. */
     private List<Transaction> transactionList;
 
     /**
-     * Constructs an account with account number and initial balance.
+     * Constructs an account with the given number and initial balance.
      *
-     * @param accNumber    the account number (must not be null)
-     * @param initBalance  the initial balance (non-negative)
+     * @param accNumber the account number
+     * @param initBalance the initial balance
      */
     public Account(final String accNumber, final double initBalance) {
         this.accountNumber = accNumber;
@@ -80,12 +84,13 @@ public class Account {
      *
      * @param newTransactionList the new transaction list
      */
-    public final void setTransactionList(final List<Transaction> newTransactionList) {
+    public final void setTransactionList(
+            final List<Transaction> newTransactionList) {
         this.transactionList = newTransactionList;
     }
 
     /**
-     * Adds a transaction to the account.
+     * Adds a transaction to the account's history.
      *
      * @param transaction the transaction to add
      */
@@ -137,9 +142,9 @@ public class Account {
     }
 
     /**
-     * Compares this account to another object.
+     * Compares this account to another object for equality.
      *
-     * @param obj the object to compare
+     * @param obj the reference object
      * @return true if account numbers are equal
      */
     @Override
@@ -161,13 +166,14 @@ public class Account {
      */
     @Override
     public int hashCode() {
-        return HASH_PRIME + (accountNumber == null ? 0 : accountNumber.hashCode());
+        return HASH_PRIME + (accountNumber == null
+                ? 0 : accountNumber.hashCode());
     }
 
     /**
      * Returns a string representation of the account.
      *
-     * @return account details
+     * @return account details as a string
      */
     @Override
     public String toString() {

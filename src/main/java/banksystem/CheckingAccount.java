@@ -1,5 +1,4 @@
 package banksystem;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,15 +6,18 @@ import org.slf4j.LoggerFactory;
  * Represents a checking account with no overdraft protection.
  */
 public class CheckingAccount extends Account {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingAccount.class);
+    /** Logger for checking account events. */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(CheckingAccount.class);
 
     /**
      * Constructs a checking account.
      *
      * @param accountNumber the account number
-     * @param balance       the initial balance
+     * @param balance the initial balance
      */
-    public CheckingAccount(final String accountNumber, final double balance) {
+    public CheckingAccount(final String accountNumber,
+            final double balance) {
         super(accountNumber, balance);
     }
 
@@ -38,7 +40,7 @@ public class CheckingAccount extends Account {
      *
      * @param amount the amount to withdraw (positive, ≤ balance)
      * @throws InvalidFundingAmountException if amount is not positive
-     * @throws InsufficientFundsException    if balance is insufficient
+     * @throws InsufficientFundsException if balance is insufficient
      */
     @Override
     public void withdraw(final double amount)

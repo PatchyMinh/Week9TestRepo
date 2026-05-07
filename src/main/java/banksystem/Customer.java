@@ -1,5 +1,4 @@
 package banksystem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,19 +9,25 @@ import org.slf4j.LoggerFactory;
  * Represents a bank customer with personal information and accounts.
  */
 public class Customer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Customer.class);
+    /** Logger for customer operations. */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(Customer.class);
 
+    /** The customer ID number. */
     private String idNumber;
+    /** The customer's full name. */
     private String fullName;
+    /** List of accounts owned by this customer. */
     private List<Account> accountList;
 
     /**
-     * Constructs a customer with ID and name.
+     * Constructs a customer with given ID and name.
      *
-     * @param newIdNumber   the customer ID
-     * @param newFullName   the full name
+     * @param newIdNumber the ID number
+     * @param newFullName the full name
      */
-    public Customer(final String newIdNumber, final String newFullName) {
+    public Customer(final String newIdNumber,
+            final String newFullName) {
         this.idNumber = newIdNumber;
         this.fullName = newFullName;
         this.accountList = new ArrayList<>();
@@ -84,7 +89,7 @@ public class Customer {
     }
 
     /**
-     * Adds an account to the customer.
+     * Adds an account to this customer.
      *
      * @param account the account to add
      */
@@ -95,7 +100,7 @@ public class Customer {
     }
 
     /**
-     * Removes an account from the customer.
+     * Removes an account from this customer.
      *
      * @param account the account to remove
      * @return true if removed, false otherwise
@@ -110,7 +115,7 @@ public class Customer {
     }
 
     /**
-     * Returns a string representation of the customer.
+     * Returns a string representation of this customer.
      *
      * @return customer details
      */

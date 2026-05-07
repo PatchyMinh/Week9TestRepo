@@ -1,5 +1,4 @@
 package banksystem;
-
 /**
  * Thrown when a deposit or withdrawal amount is non-positive.
  */
