@@ -1,13 +1,4 @@
-name: Java CI with Maven
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-  name: Multi-platform Java CI
+name: Multi-platform Java CI
 
 on:
   push:
@@ -20,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        java-version: [11, 17, 21]
+        java-version: [17] # Bạn có thể thêm 11, 21 nếu muốn test rộng hơn
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -37,10 +28,11 @@ jobs:
         cache: maven
 
     - name: Build and Test with Maven
+      # Lưu ý: Nếu file pom.xml nằm trong Bai02/demo, hãy thêm -f Bai02/demo/pom.xml
       run: mvn -B package
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4 # Cập nhật lên v4 cho ổn định
       with:
-        name: bank-system-package
+        name: bank-system-${{ matrix.os }}-java${{ matrix.java-version }}
         path: target/*.jar
