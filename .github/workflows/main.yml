@@ -1,38 +1,70 @@
-name: Multi-platform Java CI
+name: CI with Matrix, Caching and Coverage
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main, master ]
 
 jobs:
   build:
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        java-version: [17] # Bạn có thể thêm 11, 21 nếu muốn test rộng hơn
-      fail-fast: false
-
-    runs-on: ${{ matrix.os }}
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Run tests and verify coverage
+        run: mvn verify
+      - name: Upload JaCoCo report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report-${{ matrix.os }}
+          path: target/site/jacoco/index.html
+        if: always()
 
-    - name: Set up JDK ${{ matrix.java-version }}
-      uses: actions/setup-java@v3
-      with:
-        java-version: ${{ matrix.java-version }}
-        distribution: 'temurin'
-        cache: maven
-
-    - name: Build and Test with Maven
-      # Lưu ý: Nếu file pom.xml nằm trong Bai02/demo, hãy thêm -f Bai02/demo/pom.xml
-      run: mvn -B package
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4 # Cập nhật lên v4 cho ổn định
-      with:
-        name: bank-system-${{ matrix.os }}-java${{ matrix.java-version }}
-        path: target/*.jar
+  verify-package:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17 with Maven cache
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Show cache status
+        run: |
+          echo "Maven cache is enabled. Check 'setup-java' logs for cache hit/miss."
+      - name: Package application
+        run: mvn clean package -DskipTests
+      - name: Verify JAR created
+        run: test -f target/*.jar && echo "JAR exists" || exit 1
+      - name: Run JAR and test logging
+        run: |
+          java -jar target/*.jar > output.log 2>&1 &
+          APP_PID=$!
+          sleep 5
+          kill $APP_PID || true
+      - name: Check console log
+        run: grep -q "Bank loaded successfully" output.log
+      - name: Check file log
+        run: |
+          test -f logs/bank_system.log
+          grep -q "Bank loaded successfully" logs/bank_system.log
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-logs
+          path: |
+            output.log
+            logs/bank_system.log
